@@ -6,9 +6,15 @@
 //
 
 #import "FFTOpenGLVersionHelper.h"
-#import <OpenGL/gl3ext.h>
+
+#if TARGET_OS_OSX
+#import <OpenGL/gl.h>
 #import <AppKit/NSOpenGL.h>
 #import <OpenGL/OpenGL.h>
+#import <OpenGL/gl3ext.h>
+#else
+#import <OpenGLES/EAGL.h>
+#endif
 
 //https://stackoverflow.com/questions/46322280/how-to-check-opengl-and-glsl-version-without-creating-a-window
 

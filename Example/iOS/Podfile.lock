@@ -1,5 +1,6 @@
 PODS:
   - FFmpegTutorial (0.5.20):
+    - FFmpegTutorial/0x00 (= 0.5.20)
     - FFmpegTutorial/0x01 (= 0.5.20)
     - FFmpegTutorial/0x02 (= 0.5.20)
     - FFmpegTutorial/0x03 (= 0.5.20)
@@ -17,6 +18,7 @@ PODS:
     - FFmpegTutorial/0x36 (= 0.5.20)
     - FFmpegTutorial/0x50 (= 0.5.20)
     - FFmpegTutorial/common (= 0.5.20)
+  - FFmpegTutorial/0x00 (0.5.20)
   - FFmpegTutorial/0x01 (0.5.20)
   - FFmpegTutorial/0x02 (0.5.20)
   - FFmpegTutorial/0x03 (0.5.20)
@@ -34,17 +36,24 @@ PODS:
   - FFmpegTutorial/0x36 (0.5.20)
   - FFmpegTutorial/0x50 (0.5.20)
   - FFmpegTutorial/common (0.5.20)
+  - Masonry (1.1.0)
 
 DEPENDENCIES:
   - FFmpegTutorial (from `../../`)
+  - Masonry
+
+SPEC REPOS:
+  trunk:
+    - Masonry
 
 EXTERNAL SOURCES:
   FFmpegTutorial:
     :path: "../../"
 
 SPEC CHECKSUMS:
-  FFmpegTutorial: a3a8917261798e4d0fa660c7abe096052190705d
+  FFmpegTutorial: bcd1e42c97a7151b411b50a4006c29a36c06409a
+  Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
 
-PODFILE CHECKSUM: 42336735709a8443d70dfef57d6e4e7829aee364
+PODFILE CHECKSUM: 3ca180b482220ab107d313aab906fd6da209163d
 
-COCOAPODS: 1.11.2
+COCOAPODS: 1.9.3

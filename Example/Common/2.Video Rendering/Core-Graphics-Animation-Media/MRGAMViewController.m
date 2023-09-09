@@ -7,7 +7,7 @@
 //
 
 #import "MRGAMViewController.h"
-#import <FFmpegTutorial/FFTPlayer0x10.h>
+#import <FFmpegTutorial/FFTPlayer0x03.h>
 #import <FFmpegTutorial/FFTHudControl.h>
 #import <libavutil/frame.h>
 #import "MRCoreAnimationView.h"
@@ -20,7 +20,7 @@
     MRPixelFormatMask _pixelFormat;
 }
 
-@property (strong) FFTPlayer0x10 *player;
+@property (strong) FFTPlayer0x03 *player;
 
 @property (weak) NSView<MRVideoRenderingProtocol>* videoRenderer;
 @property (assign) Class<MRVideoRenderingProtocol> renderingClazz;
@@ -106,12 +106,12 @@
         self.timer = nil;
     }
     
-    FFTPlayer0x10 *player = [[FFTPlayer0x10 alloc] init];
+    FFTPlayer0x03 *player = [[FFTPlayer0x03 alloc] init];
     player.contentPath = url;
     player.supportedPixelFormats = _pixelFormat;
     
     __weakSelf__
-    player.onVideoOpened = ^(FFTPlayer0x10 *player, NSDictionary * _Nonnull info) {
+    player.onVideoOpened = ^(FFTPlayer0x03 *player, NSDictionary * _Nonnull info) {
         __strongSelf__
         if (player != self.player) {
             return;
@@ -123,7 +123,7 @@
         NSLog(@"----------------------");
     };
     
-    player.onError = ^(FFTPlayer0x10 *player, NSError * _Nonnull e) {
+    player.onError = ^(FFTPlayer0x03 *player, NSError * _Nonnull e) {
         __strongSelf__
         if (player != self.player) {
             return;
@@ -135,7 +135,7 @@
         self.timer = nil;
     };
     
-    player.onDecoderFrame = ^(FFTPlayer0x10 *player, int type, int serial, AVFrame * _Nonnull frame) {
+    player.onDecoderFrame = ^(FFTPlayer0x03 *player, int type, int serial, AVFrame * _Nonnull frame) {
         __strongSelf__
         if (player != self.player) {
             return;

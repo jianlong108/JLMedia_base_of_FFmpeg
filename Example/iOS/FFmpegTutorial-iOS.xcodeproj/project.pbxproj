@@ -66,16 +66,7 @@
 		DD97CCCE293B5BD400797F3B /* MRCrossPlatformUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = DD97CCCD293B5BD400797F3B /* MRCrossPlatformUtil.m */; };
 		DD97CCE9293B5BE900797F3B /* MRMovieProberViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DD97CCD2293B5BE900797F3B /* MRMovieProberViewController.m */; };
 		DD97CCEA293B5BE900797F3B /* MRGLVersionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DD97CCD4293B5BE900797F3B /* MRGLVersionViewController.m */; };
-		DD97CCEC293B5BE900797F3B /* MRGLVersionViewController-iOS.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD97CCD7293B5BE900797F3B /* MRGLVersionViewController-iOS.xib */; };
-		DD97CCEE293B5BE900797F3B /* MRReadPacketViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DD97CCDB293B5BE900797F3B /* MRReadPacketViewController.m */; };
-		DD97CCEF293B5BE900797F3B /* MRCustomThreadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DD97CCDE293B5BE900797F3B /* MRCustomThreadViewController.m */; };
 		DD97CCF2293B5BE900797F3B /* MRCustomDecoderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DD97CCE3293B5BE900797F3B /* MRCustomDecoderViewController.m */; };
-		DD97CCF4293B5BE900797F3B /* MRDecodePacketViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DD97CCE7293B5BE900797F3B /* MRDecodePacketViewController.m */; };
-		DD97CCF9293B744000797F3B /* MRCustomThreadViewController-iOS.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD97CCF8293B744000797F3B /* MRCustomThreadViewController-iOS.xib */; };
-		DD97CCFB293B74C100797F3B /* MRMovieProberViewController-iOS.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD97CCFA293B74C100797F3B /* MRMovieProberViewController-iOS.xib */; };
-		DD97CCFD293B7C4700797F3B /* MRReadPacketViewController-iOS.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD97CCFC293B7C4700797F3B /* MRReadPacketViewController-iOS.xib */; };
-		DD97CCFF293B7EAB00797F3B /* MRDecodePacketViewController-iOS.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD97CCFE293B7EAB00797F3B /* MRDecodePacketViewController-iOS.xib */; };
-		DD97CD01293B7F3100797F3B /* MRCustomDecoderViewController-iOS.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD97CD00293B7F3100797F3B /* MRCustomDecoderViewController-iOS.xib */; };
 		DD97CDA4293C53D600797F3B /* MRCoreMediaView.m in Sources */ = {isa = PBXBuildFile; fileRef = DD97CD5F293C53D500797F3B /* MRCoreMediaView.m */; };
 		DD97CDA5293C53D600797F3B /* MRCoreGraphicsView.m in Sources */ = {isa = PBXBuildFile; fileRef = DD97CD60293C53D500797F3B /* MRCoreGraphicsView.m */; };
 		DD97CDA6293C53D600797F3B /* MRGAMViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DD97CD62293C53D500797F3B /* MRGAMViewController.m */; };
@@ -191,20 +182,8 @@
 		DD97CCD2293B5BE900797F3B /* MRMovieProberViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRMovieProberViewController.m; sourceTree = "<group>"; };
 		DD97CCD4293B5BE900797F3B /* MRGLVersionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRGLVersionViewController.m; sourceTree = "<group>"; };
 		DD97CCD6293B5BE900797F3B /* MRGLVersionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRGLVersionViewController.h; sourceTree = "<group>"; };
-		DD97CCD7293B5BE900797F3B /* MRGLVersionViewController-iOS.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "MRGLVersionViewController-iOS.xib"; sourceTree = "<group>"; };
-		DD97CCD9293B5BE900797F3B /* MRReadPacketViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRReadPacketViewController.h; sourceTree = "<group>"; };
-		DD97CCDB293B5BE900797F3B /* MRReadPacketViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRReadPacketViewController.m; sourceTree = "<group>"; };
-		DD97CCDD293B5BE900797F3B /* MRCustomThreadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRCustomThreadViewController.h; sourceTree = "<group>"; };
-		DD97CCDE293B5BE900797F3B /* MRCustomThreadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRCustomThreadViewController.m; sourceTree = "<group>"; };
 		DD97CCE1293B5BE900797F3B /* MRCustomDecoderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRCustomDecoderViewController.h; sourceTree = "<group>"; };
 		DD97CCE3293B5BE900797F3B /* MRCustomDecoderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRCustomDecoderViewController.m; sourceTree = "<group>"; };
-		DD97CCE5293B5BE900797F3B /* MRDecodePacketViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRDecodePacketViewController.h; sourceTree = "<group>"; };
-		DD97CCE7293B5BE900797F3B /* MRDecodePacketViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRDecodePacketViewController.m; sourceTree = "<group>"; };
-		DD97CCF8293B744000797F3B /* MRCustomThreadViewController-iOS.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "MRCustomThreadViewController-iOS.xib"; sourceTree = "<group>"; };
-		DD97CCFA293B74C100797F3B /* MRMovieProberViewController-iOS.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "MRMovieProberViewController-iOS.xib"; sourceTree = "<group>"; };
-		DD97CCFC293B7C4700797F3B /* MRReadPacketViewController-iOS.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "MRReadPacketViewController-iOS.xib"; sourceTree = "<group>"; };
-		DD97CCFE293B7EAB00797F3B /* MRDecodePacketViewController-iOS.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "MRDecodePacketViewController-iOS.xib"; sourceTree = "<group>"; };
-		DD97CD00293B7F3100797F3B /* MRCustomDecoderViewController-iOS.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "MRCustomDecoderViewController-iOS.xib"; sourceTree = "<group>"; };
 		DD97CD44293C53D500797F3B /* MRVideoRenderingProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRVideoRenderingProtocol.h; sourceTree = "<group>"; };
 		DD97CD5B293C53D500797F3B /* MRVideoRenderingBasicProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRVideoRenderingBasicProtocol.h; sourceTree = "<group>"; };
 		DD97CD5C293C53D500797F3B /* MRVideoRenderingV2Protocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRVideoRenderingV2Protocol.h; sourceTree = "<group>"; };
@@ -339,10 +318,7 @@
 			isa = PBXGroup;
 			children = (
 				DD97CCD3293B5BE900797F3B /* OpenGL Version */,
-				DD97CCDC293B5BE900797F3B /* Custom Thread */,
 				DD97CCCF293B5BE900797F3B /* Movie Prober */,
-				DD97CCD8293B5BE900797F3B /* Read Packet */,
-				DD97CCE4293B5BE900797F3B /* Decode Packet */,
 				DD97CCE0293B5BE900797F3B /* Custom Decoder */,
 			);
 			path = "1.The Basis Of AV";
@@ -481,7 +457,6 @@
 			children = (
 				DD97CCD0293B5BE900797F3B /* MRMovieProberViewController.h */,
 				DD97CCD2293B5BE900797F3B /* MRMovieProberViewController.m */,
-				DD97CCFA293B74C100797F3B /* MRMovieProberViewController-iOS.xib */,
 			);
 			name = "Movie Prober";
 			path = "../../../Common/1.The Basis Of AV/Movie Prober";
@@ -490,7 +465,6 @@
 		DD97CCD3293B5BE900797F3B /* OpenGL Version */ = {
 			isa = PBXGroup;
 			children = (
-				DD97CCD7293B5BE900797F3B /* MRGLVersionViewController-iOS.xib */,
 				DD97CCD6293B5BE900797F3B /* MRGLVersionViewController.h */,
 				DD97CCD4293B5BE900797F3B /* MRGLVersionViewController.m */,
 			);
@@ -498,48 +472,14 @@
 			path = "../../../Common/1.The Basis Of AV/OpenGL Version";
 			sourceTree = "<group>";
 		};
-		DD97CCD8293B5BE900797F3B /* Read Packet */ = {
-			isa = PBXGroup;
-			children = (
-				DD97CCD9293B5BE900797F3B /* MRReadPacketViewController.h */,
-				DD97CCDB293B5BE900797F3B /* MRReadPacketViewController.m */,
-				DD97CCFC293B7C4700797F3B /* MRReadPacketViewController-iOS.xib */,
-			);
-			name = "Read Packet";
-			path = "../../../Common/1.The Basis Of AV/Read Packet";
-			sourceTree = "<group>";
-		};
-		DD97CCDC293B5BE900797F3B /* Custom Thread */ = {
-			isa = PBXGroup;
-			children = (
-				DD97CCDD293B5BE900797F3B /* MRCustomThreadViewController.h */,
-				DD97CCDE293B5BE900797F3B /* MRCustomThreadViewController.m */,
-				DD97CCF8293B744000797F3B /* MRCustomThreadViewController-iOS.xib */,
-			);
-			name = "Custom Thread";
-			path = "../../../Common/1.The Basis Of AV/Custom Thread";
-			sourceTree = "<group>";
-		};
 		DD97CCE0293B5BE900797F3B /* Custom Decoder */ = {
 			isa = PBXGroup;
 			children = (
 				DD97CCE1293B5BE900797F3B /* MRCustomDecoderViewController.h */,
 				DD97CCE3293B5BE900797F3B /* MRCustomDecoderViewController.m */,
-				DD97CD00293B7F3100797F3B /* MRCustomDecoderViewController-iOS.xib */,
 			);
 			name = "Custom Decoder";
 			path = "../../../Common/1.The Basis Of AV/Custom Decoder";
-			sourceTree = "<group>";
-		};
-		DD97CCE4293B5BE900797F3B /* Decode Packet */ = {
-			isa = PBXGroup;
-			children = (
-				DD97CCE5293B5BE900797F3B /* MRDecodePacketViewController.h */,
-				DD97CCE7293B5BE900797F3B /* MRDecodePacketViewController.m */,
-				DD97CCFE293B7EAB00797F3B /* MRDecodePacketViewController-iOS.xib */,
-			);
-			name = "Decode Packet";
-			path = "../../../Common/1.The Basis Of AV/Decode Packet";
 			sourceTree = "<group>";
 		};
 		DD97CD14293C53D500797F3B /* 2.Video Rendering */ = {
@@ -648,7 +588,7 @@
 				ORGANIZATIONNAME = "Matt Reach's Awesome FFmpeg Tutotial";
 				TargetAttributes = {
 					6003F589195388D20070C39A = {
-						DevelopmentTeam = 96C96H28CU;
+						DevelopmentTeam = 92LYFY28ZA;
 						LastSwiftMigration = 1150;
 					};
 				};
@@ -678,22 +618,16 @@
 			files = (
 				DDBFE783294EF8C400403352 /* MRAudioRendererViewController-iOS.xib in Resources */,
 				873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */,
-				DD97CCFF293B7EAB00797F3B /* MRDecodePacketViewController-iOS.xib in Resources */,
 				DDCC56B5294EC8410024A4D7 /* MRHaveFunViewController-iOS.xib in Resources */,
 				71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */,
 				DD53139129443F4400185AD5 /* MRGLES2ViewController-iOS.xib in Resources */,
 				DD5313B82944AD3400185AD5 /* 2_sampler2D_NV21_es3.fsh in Resources */,
-				DD97CCEC293B5BE900797F3B /* MRGLVersionViewController-iOS.xib in Resources */,
-				DD97CCFB293B74C100797F3B /* MRMovieProberViewController-iOS.xib in Resources */,
 				DD53138C29443F4400185AD5 /* 2_sampler2D_NV21_es2.fsh in Resources */,
 				DD5313C22944AD3400185AD5 /* common_es3.vsh in Resources */,
 				6003F5A9195388D20070C39A /* Images.xcassets in Resources */,
-				DD97CD01293B7F3100797F3B /* MRCustomDecoderViewController-iOS.xib in Resources */,
 				DD97CDB8293C775E00797F3B /* MRGAMViewController-iOS.xib in Resources */,
 				6003F598195388D20070C39A /* InfoPlist.strings in Resources */,
-				DD97CCF9293B744000797F3B /* MRCustomThreadViewController-iOS.xib in Resources */,
 				DD469DF3294621E8004F5F39 /* MRAudioQueueViewController-iOS.xib in Resources */,
-				DD97CCFD293B7C4700797F3B /* MRReadPacketViewController-iOS.xib in Resources */,
 				DD5313B92944AD3400185AD5 /* 3_sampler2D_es3.fsh in Resources */,
 				DD5313BB2944AD3400185AD5 /* 2_sampler2D_es3.fsh in Resources */,
 				DD53138F29443F4400185AD5 /* 1_sampler2D_es2.fsh in Resources */,
@@ -718,10 +652,12 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FFmpegTutorial-iOS/Pods-FFmpegTutorial-iOS-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/FFmpegTutorial/FFmpegTutorial.framework",
+				"${BUILT_PRODUCTS_DIR}/Masonry/Masonry.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FFmpegTutorial.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Masonry.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -769,9 +705,7 @@
 				DD53141F2945DDC600185AD5 /* MRAudioUnitViewController.m in Sources */,
 				DDCC56B1294EC7090024A4D7 /* MRHaveFunVideoRenderer.m in Sources */,
 				6003F59E195388D20070C39A /* MRAppDelegate.m in Sources */,
-				DD97CCEE293B5BE900797F3B /* MRReadPacketViewController.m in Sources */,
 				DD5313E42944AEBA00185AD5 /* MRMetalOffscreenRendering.m in Sources */,
-				DD97CCEF293B5BE900797F3B /* MRCustomThreadViewController.m in Sources */,
 				DD5313F72944B2AF00185AD5 /* MRRWeakProxy.m in Sources */,
 				DD5313E52944AEBA00185AD5 /* MRMetalBGRAPipeline.m in Sources */,
 				DD469DF5294621E8004F5F39 /* MRAudioQueueViewController.m in Sources */,
@@ -803,7 +737,6 @@
 				6003F59A195388D20070C39A /* main.m in Sources */,
 				DD5313A029448BC000185AD5 /* MRGLES2NV12View.m in Sources */,
 				DDBFE77F294EF8C400403352 /* MRAudioUnitRenderer.m in Sources */,
-				DD97CCF4293B5BE900797F3B /* MRDecodePacketViewController.m in Sources */,
 				DDBFE780294EF8C400403352 /* MRAudioQueueRenderer.m in Sources */,
 				DD5313C12944AD3400185AD5 /* MRGLES3NV12View.m in Sources */,
 			);
@@ -939,10 +872,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				DEVELOPMENT_TEAM = 96C96H28CU;
+				DEVELOPMENT_TEAM = 92LYFY28ZA;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FFmpegTutorial-iOS/FFmpegTutorial-iOS.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/FFmpegTutorial-iOS/FFmpegTutorial-iOS.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 2.0;
 				MODULE_NAME = ExampleApp;
@@ -962,10 +896,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				DEVELOPMENT_TEAM = 96C96H28CU;
+				DEVELOPMENT_TEAM = 92LYFY28ZA;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FFmpegTutorial-iOS/FFmpegTutorial-iOS.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/FFmpegTutorial-iOS/FFmpegTutorial-iOS.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 2.0;
 				MODULE_NAME = ExampleApp;

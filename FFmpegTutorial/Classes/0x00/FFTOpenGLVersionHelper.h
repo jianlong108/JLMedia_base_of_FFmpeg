@@ -12,8 +12,12 @@
  */
 
 #import <Foundation/Foundation.h>
+//#import <OpenGL/gl3.h>
+#if TARGET_OS_OSX
 #import <OpenGL/gl3.h>
-
+#else
+#import <OpenGLES/ES2/gl.h>
+#endif
 NS_ASSUME_NONNULL_BEGIN
 
 @interface FFTOpenGLVersionHelper : NSObject

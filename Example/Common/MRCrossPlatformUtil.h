@@ -11,6 +11,7 @@
 
 #import <Foundation/Foundation.h>
 #import <TargetConditionals.h>
+#import <Masonry/Masonry.h>
 
 #if TARGET_OS_OSX
 #import <Cocoa/Cocoa.h>
@@ -78,11 +79,14 @@ typedef UIScreen NSScreen;
 @end
 #endif
 
-@interface MRBaseViewController : NSViewController
 
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IOS
+@interface MRBaseViewController : UIViewController
 - (void)viewWillAppear;
 - (void)viewWillDisappear;
+#else
+@interface MRBaseViewController : NSViewController
+
 #endif
 - (int)alert:(NSString *_Nonnull)title msg:(NSString *_Nullable)msg;
 

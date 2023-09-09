@@ -119,6 +119,7 @@
 @end
 
 #else
+#import "MRUtil.h"
 CGContextRef __nullable UIGraphicsGetCurrentContext(void)
 {
     return [[NSGraphicsContext currentContext] graphicsPort];

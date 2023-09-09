@@ -8,6 +8,7 @@
 #import "RootViewController.h"
 #import "RootTableRowView.h"
 #import "NSNavigationController.h"
+#import "MRUtil.h"
 
 @interface RootViewController ()<NSTableViewDelegate,NSTableViewDataSource>
 
@@ -28,7 +29,7 @@
     [super viewDidLoad];
     // Do view setup here.
     
-    self.title = @"FFmpeg-Tutorial";
+    self.title = @"Media-Tutorial";
     
     NSScrollView * scrollView = [[NSScrollView alloc] init];
     scrollView.hasVerticalScroller = NO;
@@ -40,7 +41,11 @@
     NSTableView *tableView = [[NSTableView alloc] initWithFrame:self.view.bounds];
     tableView.autoresizingMask = NSViewHeightSizable | NSViewWidthSizable;
     tableView.intercellSpacing = NSMakeSize(0, 0);
-    tableView.backgroundColor = [NSColor colorWithWhite:230.0/255.0 alpha:1.0];
+    if ([MRUtil isDarkMode]) {
+        tableView.backgroundColor = [NSColor blackColor];
+    } else {
+        tableView.backgroundColor = [NSColor colorWithWhite:230.0/255.0 alpha:1.0];
+    }
    
 //    if (@available(macOS 11.0, *)) {
 //        tableView.style = NSTableViewStylePlain;
@@ -71,87 +76,64 @@
     self.dataArr = @[
         @{
             @"isSeparactor":@(YES),
-            @"height":@(0.1)
+            @"height":@(1.0)
         },
         @{
-            @"title":@"一、音视频基础",
+            @"title":@"一、播放器",
             @"isSection":@(YES)
         },
         @{
-            @"title":@"OpenGL Version",
+            @"title":@"1.1:OpenGL/FFMpeg Version",
             @"detail":@"FFmpeg编译配置和版本信息;OpengGL信息",
             @"class":@"MRGLVersionViewController",
         },
         @{
-            @"title":@"Custom Thread",
-            @"detail":@"封装NSThread，方便后续调用",
-            @"class":@"MRCustomThreadViewController",
-        },
-        @{
-            @"title":@"Movie Prober",
-            @"detail":@"查看音视频流信息",
+            @"title":@"1.2:Movie Prober",
+            @"detail":@"查看媒体流信息/读媒体包",
             @"class":@"MRMovieProberViewController",
         },
         @{
-            @"title":@"Read Packet",
-            @"detail":@"读取音视频包",
-            @"class":@"MRReadPacketViewController",
-        },
-        @{
-            @"title":@"Decode Packet",
-            @"detail":@"音视频解码",
-            @"class":@"MRDecodePacketViewController",
-        },
-        @{
-            @"title":@"Custom Decoder",
-            @"detail":@"抽取解码类，封装解码逻辑",
+            @"title":@"1.3:Decode Packet",
+            @"detail":@"音视频解码/封装解码类",
             @"class":@"MRCustomDecoderViewController",
         },
         @{
-            @"title":@"二、视频渲染",
-            @"isSection":@(YES)
-        },
-        @{
-            @"title":@"Core Animation/Core Graphics/Core Media",
+            @"title":@"1.4:Core Animation/Core Graphics/Core Media",
             @"detail":@"渲染 xRGBx / xRGBx / NV12,YUYV,UYVY 视频桢",
             @"class":@"MRGAMViewController",
         },
         @{
-            @"title":@"Legacy OpenGL",
+            @"title":@"1.5:Legacy OpenGL",
             @"detail":@"渲染 BGRA/NV12/NV21/YUV420P/UYVY/YUYV 视频桢",
             @"class":@"MRLegacyGLViewController",
         },
         @{
-            @"title":@"Modern OpenGL",
+            @"title":@"1.6:Modern OpenGL",
             @"detail":@"渲染 BGRA/NV12/NV21/YUV420P/UYVY/YUYV 视频桢",
             @"class":@"MRModernGLViewController",
         },
         @{
-            @"title":@"Modern OpenGL(Rectangle Texture)",
+            @"title":@"1.7:Modern OpenGL(Rectangle Texture)",
             @"detail":@"渲染 BGRA/NV12/NV21/YUV420P/UYVY/YUYV 视频桢",
             @"class":@"MRModernGLRectViewController",
         },
         @{
-            @"title":@"Metal",
+            @"title":@"1.8:Metal",
             @"detail":@"渲染 BGRA/NV12/NV21/YUV420P/UYVY/YUYV 视频桢",
             @"class":@"MRMetalViewController",
         },
         @{
-            @"title":@"三、音频渲染",
-            @"isSection":@(YES)
-        },
-        @{
-            @"title":@"AudioUnit",
+            @"title":@"1.9:AudioUnit",
             @"detail":@"支持 S16,S16P,Float,FloatP 格式，采样率为 44.1K,48K,96K,192K",
             @"class":@"MRAudioUnitViewController",
         },
         @{
-            @"title":@"AudioQueue",
+            @"title":@"1.10:AudioQueue",
             @"detail":@"支持 S16,Float 格式，采样率为 44.1K,48K,96K,192K",
             @"class":@"MRAudioQueueViewController",
         },
         @{
-            @"title":@"封装AudioUnit 和 AudioQueue",
+            @"title":@"1.11:封装AudioUnit 和 AudioQueue",
             @"detail":@"支持 S16,S16P,Float,FloatP 格式，采样率为 44.1K,48K,96K,192K",
             @"class":@"MRAudioRendererViewController",
         },

@@ -1,25 +1,33 @@
 //
-//  FFTPlayer0x06.m
+//  FFTPlayer0x10.m
 //  FFmpegTutorial
 //
-//  Created by qianlongxu on 2020/5/14.
+//  Created by qianlongxu on 2022/7/5.
 //
 
-#import "FFTPlayer0x06.h"
-#import "FFTDecoder0x06.h"
+#import "FFTPlayer0x03.h"
 #import <libavutil/pixdesc.h>
 #import <libavformat/avformat.h>
+#import "FFTDecoder0x02.h"
+#import "FFTVideoScale.h"
 #import "FFTThread.h"
 #import "FFTDispatch.h"
 #import "FFTAbstractLogger.h"
 
-@interface  FFTPlayer0x06 ()<FFTDecoderDelegate0x06>
+//视频宽；单位像素
+kFFTPlayer0x10InfoKey kFFTPlayer0x10Width = @"kFFTPlayer0x10Width";
+//视频高；单位像素
+kFFTPlayer0x10InfoKey kFFTPlayer0x10Height = @"kFFTPlayer0x10Height";
+
+@interface  FFTPlayer0x03 ()<FFTDecoderDelegate0x10>
 {
     //音频流解码器
-    FFTDecoder0x06 *_audioDecoder;
+    FFTDecoder0x02 *_audioDecoder;
     //视频流解码器
-    FFTDecoder0x06 *_videoDecoder;
+    FFTDecoder0x02 *_videoDecoder;
     
+    //图像格式转换/缩放器
+    FFTVideoScale *_videoScale;
     //读包完毕？
     int _eof;
 }
@@ -35,11 +43,11 @@
 
 @end
 
-@implementation  FFTPlayer0x06
+@implementation  FFTPlayer0x03
 
 static int decode_interrupt_cb(void *ctx)
 {
-    FFTPlayer0x06 *player = (__bridge FFTPlayer0x06 *)ctx;
+    FFTPlayer0x03 *player = (__bridge FFTPlayer0x03 *)ctx;
     return player.abort_request;
 }
 
@@ -71,16 +79,15 @@ static int decode_interrupt_cb(void *ctx)
         NSAssert(NO, @"不允许重复创建");
     }
     
-    
     self.readThread = [[FFTThread alloc] initWithTarget:self selector:@selector(readPacketsFunc) object:nil];
     self.readThread.name = @"mr-read";
 }
 
 #pragma mark - 打开解码器创建解码线程
 
-- (FFTDecoder0x06 *)openStreamComponent:(AVFormatContext *)ic streamIdx:(int)idx
+- (FFTDecoder0x02 *)openStreamComponent:(AVFormatContext *)ic streamIdx:(int)idx
 {
-    FFTDecoder0x06 *decoder = [FFTDecoder0x06 new];
+    FFTDecoder0x02 *decoder = [FFTDecoder0x02 new];
     decoder.ic = ic;
     decoder.streamIdx = idx;
     if ([decoder open] == 0) {
@@ -286,6 +293,8 @@ static int decode_interrupt_cb(void *ctx)
         }
     }
     
+    NSMutableDictionary *dumpDic = [NSMutableDictionary dictionary];
+    
     if (st_index[AVMEDIA_TYPE_VIDEO] >= 0){
         _videoDecoder = [self openStreamComponent:formatCtx streamIdx:st_index[AVMEDIA_TYPE_VIDEO]];
         if (!_videoDecoder) {
@@ -295,26 +304,102 @@ static int decode_interrupt_cb(void *ctx)
             //出错了，销毁下相关结构体
             avformat_close_input(&formatCtx);
             return;
+        } else {
+            [dumpDic setObject:@(_videoDecoder.picWidth) forKey:kFFTPlayer0x10Width];
+            [dumpDic setObject:@(_videoDecoder.picHeight) forKey:kFFTPlayer0x10Height];
+            _videoScale = [self createVideoScaleIfNeed];
         }
     }
+    
+    mr_sync_main_queue(^{
+        if (self.onVideoOpened) {
+            self.onVideoOpened(self,dumpDic);
+        }
+    });
+    
     //循环读包
     [self readPacketLoop:formatCtx];
     //读包线程结束了，销毁下相关结构体
     avformat_close_input(&formatCtx);
 }
 
-#pragma mark - FFTDecoderDelegate0x06
+#pragma mark - 视频像素格式转换
 
-- (void)decoder:(FFTDecoder0x06 *)decoder reveivedAFrame:(AVFrame *)frame
+- (FFTVideoScale *)createVideoScaleIfNeed
+{
+    //未指定期望像素格式
+    if (self.supportedPixelFormats == MR_PIX_FMT_MASK_NONE) {
+        NSAssert(NO, @"supportedPixelFormats can't be none!");
+        return nil;
+    }
+    
+    //当前视频的像素格式
+    const enum AVPixelFormat format = _videoDecoder.pix_fmt;
+    
+    bool matched = false;
+    MRPixelFormat firstSupportedFmt = MR_PIX_FMT_NONE;
+    for (int i = MR_PIX_FMT_BEGIN; i <= MR_PIX_FMT_END; i ++) {
+        const MRPixelFormat fmt = i;
+        const MRPixelFormatMask mask = 1 << fmt;
+        if (self.supportedPixelFormats & mask) {
+            if (firstSupportedFmt == MR_PIX_FMT_NONE) {
+                firstSupportedFmt = fmt;
+            }
+            
+            if (format == MRPixelFormat2AV(fmt)) {
+                matched = true;
+                break;
+            }
+        }
+    }
+    
+    if (matched) {
+        //期望像素格式包含了当前视频像素格式，则直接使用当前格式，不再转换。
+        return nil;
+    }
+    
+    if (firstSupportedFmt == MR_PIX_FMT_NONE) {
+        NSAssert(NO, @"supportedPixelFormats is invalid!");
+        return nil;
+    }
+    
+    int dest = MRPixelFormat2AV(firstSupportedFmt);
+    if ([FFTVideoScale checkCanConvertFrom:format to:dest]) {
+        //创建像素格式转换上下文
+        av_log(NULL, AV_LOG_INFO, "will scale %d to %d (%dx%d)",format,dest,_videoDecoder.picWidth,_videoDecoder.picHeight);
+        FFTVideoScale *scale = [[FFTVideoScale alloc] initWithSrcPixFmt:format dstPixFmt:dest picWidth:_videoDecoder.picWidth picHeight:_videoDecoder.picHeight];
+        return scale;
+    } else {
+        NSAssert(NO, @"can't scale from %d to %d",format,dest);
+        return nil;
+    }
+}
+
+#pragma mark - FFTDecoderDelegate0x10
+
+- (void)decoder:(FFTDecoder0x02 *)decoder reveivedAFrame:(AVFrame *)frame
 {
     if (decoder == _audioDecoder) {
         self.audioFrameCount++;
+        if (self.onDecoderFrame) {
+            self.onDecoderFrame(self,2,self.audioFrameCount,frame);
+        }
     } else if (decoder == _videoDecoder) {
+        AVFrame *outP = nil;
+        if (_videoScale) {
+            if (![_videoScale rescaleFrame:frame out:&outP]) {
+                self.error = _make_nserror_desc(FFPlayerErrorCode_RescaleFrameFailed, @"视频帧重转失败！");
+                [self performErrorResultOnMainThread];
+                return;
+            }
+        } else {
+            outP = frame;
+        }
+        
         self.videoFrameCount++;
-    }
-    
-    if (self.onDecoderFrame) {
-        self.onDecoderFrame(self,self.audioFrameCount,self.videoFrameCount);
+        if (self.onDecoderFrame) {
+            self.onDecoderFrame(self,1,self.videoFrameCount,outP);
+        }
     }
 }
 

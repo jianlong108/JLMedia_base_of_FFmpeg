@@ -1,15 +1,15 @@
 //
-//  FFTDecoder0x06.m
+//  FFTDecoder0x10.m
 //  FFmpegTutorial
 //
-//  Created by Matt Reach on 2020/6/2.
+//  Created by Matt Reach on 2022/7/5.
 //
 
-#import "FFTDecoder0x06.h"
+#import "FFTDecoder0x02.h"
 #import <libavcodec/avcodec.h>
 #import <libavformat/avformat.h>
 
-@interface FFTDecoder0x06()
+@interface FFTDecoder0x02()
 {
     //创建一个frame就行了，可以复用
     AVFrame *_frame;
@@ -17,10 +17,14 @@
 
 @property (nonatomic, assign, readwrite) AVStream * stream;
 @property (nonatomic, assign) AVCodecContext * avctx;
+//for video
+@property (nonatomic, assign, readwrite) enum AVPixelFormat pix_fmt;
+@property (nonatomic, assign, readwrite) int picWidth;
+@property (nonatomic, assign, readwrite) int picHeight;
 
 @end
 
-@implementation FFTDecoder0x06
+@implementation FFTDecoder0x02
 
 - (void)dealloc
 {
@@ -89,6 +93,9 @@
     stream->discard = AVDISCARD_DEFAULT;
     self.stream = stream;
     self.avctx = avctx;
+    self.pix_fmt = avctx->pix_fmt;
+    self.picWidth = avctx->width;
+    self.picHeight = avctx->height;
     return 0;
 }
 

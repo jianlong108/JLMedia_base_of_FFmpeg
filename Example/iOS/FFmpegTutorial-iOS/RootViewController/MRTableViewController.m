@@ -33,26 +33,26 @@
                 @"detail":@"FFmpeg编译配置和版本信息;OpengGL信息",
                 @"class":@"MRGLVersionViewController",
             },
-            @{
-                @"title":@"Custom Thread",
-                @"detail":@"封装NSThread，方便后续调用",
-                @"class":@"MRCustomThreadViewController",
-            },
+//            @{
+//                @"title":@"Custom Thread",
+//                @"detail":@"封装NSThread，方便后续调用",
+//                @"class":@"MRCustomThreadViewController",
+//            },
             @{
                 @"title":@"Movie Prober",
                 @"detail":@"查看音视频流信息",
                 @"class":@"MRMovieProberViewController",
             },
-            @{
-                @"title":@"Read Packet",
-                @"detail":@"读取音视频包",
-                @"class":@"MRReadPacketViewController",
-            },
-            @{
-                @"title":@"Decode Packet",
-                @"detail":@"音视频解码",
-                @"class":@"MRDecodePacketViewController",
-            },
+//            @{
+//                @"title":@"Read Packet",
+//                @"detail":@"读取音视频包",
+//                @"class":@"MRReadPacketViewController",
+//            },
+//            @{
+//                @"title":@"Decode Packet",
+//                @"detail":@"音视频解码",
+//                @"class":@"MRDecodePacketViewController",
+//            },
             @{
                 @"title":@"Custom Decoder",
                 @"detail":@"抽取解码类，封装解码逻辑",
@@ -265,7 +265,7 @@
     if (cls) {
         Class clazz = NSClassFromString(cls);
         if (clazz) {
-            UIViewController *vc = [[clazz alloc] initWithNibName:cls bundle:nil];
+            UIViewController *vc = [[clazz alloc] init];
             vc.title = dic[@"detail"];
             [self.navigationController pushViewController:vc animated:YES];
         } else {

@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MRDragView : NSView
 
-@property (weak, nonatomic) IBOutlet id<MRDragViewDelegate> delegate;
+@property (weak, nonatomic) id<MRDragViewDelegate> delegate;
 
 @end
 

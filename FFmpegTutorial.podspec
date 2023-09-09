@@ -35,22 +35,25 @@ Pod::Spec.new do |s|
     ss.ios.exclude_files = 'FFmpegTutorial/Classes/common/hud/mac/*.*', 'FFmpegTutorial/Classes/common/videoRenderer/mac/*.*'
   end
 
+  s.subspec '0x00' do |ss|
+    ss.source_files = 'FFmpegTutorial/Classes/0x00/*.{h,m}'
+    ss.public_header_files = 'FFmpegTutorial/Classes/0x00/*.h'
+    ss.ios.exclude_files = 'FFmpegTutorial/Classes/0x00/FFTOpenGLVersionHelper.{h,m}'
+  end
+  
   s.subspec '0x01' do |ss|
     ss.source_files = 'FFmpegTutorial/Classes/0x01/*.{h,m}'
     ss.public_header_files = 'FFmpegTutorial/Classes/0x01/*.h'
-    ss.ios.exclude_files = 'FFmpegTutorial/Classes/0x01/FFTOpenGLVersionHelper.{h,m}'
   end
-  
+
   s.subspec '0x02' do |ss|
     ss.source_files = 'FFmpegTutorial/Classes/0x02/*.{h,m}'
     ss.public_header_files = 'FFmpegTutorial/Classes/0x02/*.h'
   end
-
   s.subspec '0x03' do |ss|
     ss.source_files = 'FFmpegTutorial/Classes/0x03/*.{h,m}'
     ss.public_header_files = 'FFmpegTutorial/Classes/0x03/*.h'
   end
-
   s.subspec '0x04' do |ss|
     ss.source_files = 'FFmpegTutorial/Classes/0x04/*.{h,m}'
     ss.public_header_files = 'FFmpegTutorial/Classes/0x04/*.h'

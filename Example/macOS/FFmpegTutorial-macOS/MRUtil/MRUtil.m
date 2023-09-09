@@ -11,6 +11,21 @@
 
 @implementation MRUtil
 
+/**
+ 判断当前是否是暗黑主题
+ */
++(BOOL)isDarkMode {
+    NSAppearance *apperance = NSApp.effectiveAppearance;
+    if (@available(macOS 10.14, *)) {
+        return  [apperance bestMatchFromAppearancesWithNames:@[NSAppearanceNameDarkAqua,NSAppearanceNameAqua]] == NSAppearanceNameDarkAqua;
+    }
+    return NO;
+}
+
++ (CGSize)windowMinSize
+{
+    return CGSizeMake(300, 300);
+}
 + (NSArray <NSString *>*)videoType
 {
     return @[

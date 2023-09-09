@@ -6,6 +6,7 @@
 //
 
 #import "NSNavigationController.h"
+#import "MRUtil.h"
 
 static CGFloat kNavigationBarHeight = 64;
 
@@ -59,7 +60,11 @@ static CGFloat kNavigationBarHeight = 64;
     {
         self.navigationBar = [[NSView alloc] initWithFrame:CGRectMake(0, y, self.view.bounds.size.width, kNavigationBarHeight)];
         [self.navigationBar setWantsLayer:YES];
-        self.navigationBar.layer.backgroundColor = [[NSColor colorWithWhite:0.9 alpha:0.8]CGColor];
+        if ([MRUtil isDarkMode]) {
+            self.navigationBar.layer.backgroundColor = [NSColor blackColor].CGColor;
+        } else {
+            self.navigationBar.layer.backgroundColor = [[NSColor colorWithWhite:0.9 alpha:0.8] CGColor];
+        }
         [self.view addSubview:self.navigationBar];
         self.navigationBar.autoresizingMask = NSViewWidthSizable | NSViewMaxYMargin | NSViewMinYMargin;
         

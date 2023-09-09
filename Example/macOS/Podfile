@@ -4,6 +4,7 @@ platform :osx, '10.11'
 
 target 'FFmpegTutorial-macOS' do
   pod 'FFmpegTutorial',:path => '../../'
+  pod 'Masonry'
 end
 
 pre_install do |installer|

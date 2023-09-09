@@ -7,32 +7,148 @@
 //
 
 #import "MRMovieProberViewController.h"
-#import <FFmpegTutorial/FFTPlayer0x02.h>
+#import <FFmpegTutorial/FFTPlayer0x01.h>
 #if TARGET_OS_OSX
 #import "MRDragView.h"
 #import "MRUtil.h"
 #endif
+#import "FFTDispatch.h"
 
-@interface MRMovieProberViewController ()
+@interface MRMovieProberViewController ()<
+FFTPlayer0x01Delegate
 #if TARGET_OS_OSX
-<MRDragViewDelegate>
+,MRDragViewDelegate
 #endif
+>
 
-@property (strong) FFTPlayer0x02 *player;
-@property (weak) IBOutlet NSTextField *inputField;
-@property (assign) IBOutlet NSTextView *textView;
-@property (weak) IBOutlet NSProgressIndicator *indicatorView;
-@property (strong) NSArray <NSURL *>* urlArr;
+@property (nonatomic, strong) FFTPlayer0x01 *player;
+@property (nonatomic, strong) NSTextField *inputField;
+@property (nonatomic, strong) NSTextView *textView;
+@property (nonatomic, strong) NSProgressIndicator *indicatorView;
+@property (nonatomic, strong) NSArray <NSURL *>* urlArr;
+
+
+#if TARGET_OS_IPHONE
+@property (nonatomic, strong) UILabel *audioPktLb;
+@property (nonatomic, strong) UILabel *videoPktLb;
+#else
+@property (nonatomic, strong) NSText *audioPktLb;
+@property (nonatomic, strong) NSText *videoPktLb;
+#endif
 
 @end
 
 @implementation MRMovieProberViewController
 
-- (void)dealloc
-{
+- (void)dealloc {
+
 }
 
-- (IBAction)go:(NSButton *)sender
+#if TARGET_OS_OSX
+- (void)loadView {
+    self.view = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, [MRUtil windowMinSize].width, [MRUtil windowMinSize].height)];
+}
+
+- (NSTextView *)textView {
+    if(!_textView) {
+        _textView = [[NSTextView alloc] init];
+        _textView.backgroundColor = [NSColor textBackgroundColor];
+        _textView.editable = NO;
+        _textView.textColor = [NSColor textColor];
+
+        //NSScrollView
+        NSScrollView *scrollView = [[NSScrollView alloc] init];
+        [scrollView setBorderType:NSNoBorder];
+        [scrollView setHasVerticalScroller:YES];
+        [scrollView setHasHorizontalScroller:NO];
+        [scrollView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
+
+        [_textView setMinSize:NSMakeSize(0.0, self.view.frame.size.height - 80)];
+        [_textView setMaxSize:NSMakeSize(FLT_MAX, FLT_MAX)];
+        [_textView setVerticallyResizable:YES];//垂直方向可以调整大小
+        [_textView setHorizontallyResizable:NO];//水平方向不可以调整大小
+        [_textView setAutoresizingMask:NSViewWidthSizable];
+        [[_textView textContainer] setContainerSize:NSMakeSize(FLT_MAX, FLT_MAX)];
+        [[_textView textContainer] setWidthTracksTextView:YES];
+        [_textView setFont:[NSFont fontWithName:@"PingFang-SC-Regular" size:18.0]];
+        [_textView setEditable:NO];
+
+        [scrollView setDocumentView:_textView];
+        [self.view addSubview:scrollView];
+        [scrollView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.view).offset(44);
+            make.leading.trailing.bottom.equalTo(self.view);
+        }];
+    }
+    return _textView;
+}
+#endif
+- (void)viewDidLoad {
+    [super viewDidLoad];
+
+#if TARGET_OS_OSX
+    NSTextField *fieldTitle = [[NSTextField alloc] init];
+    fieldTitle.editable = NO;
+    fieldTitle.backgroundColor = [NSColor blackColor];
+    fieldTitle.stringValue = @"媒体url:";
+
+    self.inputField = [[NSTextField alloc] init];
+
+    NSButton *goBtn = [NSButton buttonWithTitle:@"查看" target:self action:@selector(go:)];
+
+    NSStackView *stackView = [[NSStackView alloc] init];
+    stackView.spacing = 5.f;
+    [self.view addSubview:stackView];
+    [stackView addArrangedSubview:fieldTitle];
+    [stackView addArrangedSubview:self.inputField];
+    [stackView addArrangedSubview:goBtn];
+    [stackView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.leading.trailing.top.equalTo(self.view);
+        make.height.mas_equalTo(44);
+    }];
+
+    MRDragView *dragView = [[MRDragView alloc ] init];
+    dragView.delegate = self;
+    [self.view addSubview:dragView];
+    [dragView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.view);
+    }];
+    self.inputField.stringValue = KTestVideoURL1;
+
+    self.textView.string = @"可拖拽视频文件查看视频信息";
+
+    self.audioPktLb = [[NSText alloc ] init];
+
+    self.audioPktLb.backgroundColor = [NSColor orangeColor];
+    [self.view addSubview:self.audioPktLb];
+    [self.audioPktLb mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.center.equalTo(self.view);
+        make.size.mas_equalTo(CGSizeMake(200,20));
+    }];
+    self.videoPktLb = [[NSText alloc ] init];
+    self.videoPktLb.backgroundColor = [NSColor blueColor];
+    [self.view addSubview:self.videoPktLb];
+    [self.videoPktLb mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self.view);
+        make.top.equalTo(self.audioPktLb.mas_bottom);
+        make.size.mas_equalTo(CGSizeMake(200,20));
+    }];
+#else
+    
+#endif
+}
+
+
+- (void)viewWillDisappear
+{
+    [super viewWillDisappear];
+    if (_player) {
+        [_player asyncStop];
+        _player = nil;
+    }
+}
+
+- (void)go:(NSButton *)sender
 {
 #if TARGET_OS_OSX
     [self fetchFirstURL];
@@ -51,41 +167,36 @@
         [self.player asyncStop];
     }
     
-    FFTPlayer0x02 *player = [[FFTPlayer0x02 alloc] init];
+    FFTPlayer0x01 *player = [[FFTPlayer0x01 alloc] init];
+    player.delegate = self;
     player.contentPath = url;
     [player prepareToPlay];
-    __weakSelf__
-    [player openStream:^(NSError * _Nullable error, NSString * _Nullable info) {
-        __strongSelf__
-        [self.indicatorView stopAnimation:nil];
-        if (error) {
-            self.textView.string = [error localizedDescription];
-        } else {
-            self.textView.string = info;
-        }
-        [self.player asyncStop];
-        self.player = nil;
-    }];
-    
     self.player = player;
 }
-
-- (void)viewDidLoad
+#pragma mark - FFTPlayer0x01Delegate
+- (void)player:(FFTPlayer0x01 *)player receiveMediaStream:(NSString *)info
 {
-    [super viewDidLoad];
-    self.inputField.stringValue = KTestVideoURL1;
-#if TARGET_OS_OSX
-    self.textView.string = @"可拖拽视频文件查看视频信息";
-#endif
+    self.textView.string = info;
+    [self.player asyncStop];
+    self.player = nil;
 }
 
-- (void)viewWillDisappear
+- (void)player:(FFTPlayer0x01 *)player occureError:(NSError *)error
 {
-    [super viewWillDisappear];
-    if (_player) {
-        [_player asyncStop];
-        _player = nil;
-    }
+    self.textView.string = [error localizedDescription];
+}
+
+
+- (void)player:(FFTPlayer0x01 *)player whenReadPacket:(int)audioPacketCount videoPacketCount:(int)videoPacketCount {
+    mr_async_main_queue(^{
+#if TARGET_OS_OSX
+        self.audioPktLb.string = [NSString stringWithFormat:@"audioPacket:%d",audioPacketCount];
+        self.videoPktLb.string = [NSString stringWithFormat:@"videoPacket:%d",videoPacketCount];
+#else
+        
+#endif
+    });
+
 }
 
 #if TARGET_OS_OSX

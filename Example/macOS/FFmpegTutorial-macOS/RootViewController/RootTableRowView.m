@@ -6,6 +6,7 @@
 //
 
 #import "RootTableRowView.h"
+#import "MRUtil.h"
 
 @interface RootTableRowView ()
 
@@ -136,12 +137,20 @@
         self.arrowView.hidden = YES;
         self.detailLb.hidden = YES;
         [self layoutSectionCell];
-        self.layer.backgroundColor = [[NSColor colorWithWhite:230.0/255.0 alpha:1.0] CGColor];
+        if ([MRUtil isDarkMode]) {
+            self.layer.backgroundColor = [NSColor blackColor].CGColor;
+        } else {
+            self.layer.backgroundColor = [[NSColor colorWithWhite:230.0/255.0 alpha:1.0] CGColor];
+        }
     } else {
         self.arrowView.hidden = NO;
         self.detailLb.hidden = NO;
         [self layoutNormalCell];
-        self.layer.backgroundColor = [[NSColor whiteColor] CGColor];
+        if ([MRUtil isDarkMode]) {
+            self.layer.backgroundColor = [NSColor blackColor].CGColor;
+        } else {
+            self.layer.backgroundColor = [[NSColor colorWithWhite:230.0/255.0 alpha:1.0] CGColor];
+        }
     }
 }
 

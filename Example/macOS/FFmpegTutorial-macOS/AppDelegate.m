@@ -8,6 +8,7 @@
 #import "AppDelegate.h"
 #import "NSNavigationController.h"
 #import "RootViewController.h"
+#import "MRUtil.h"
 
 @interface AppDelegate ()
 
@@ -25,7 +26,7 @@
     window.titleVisibility = NSWindowTitleHidden;
     window.titlebarAppearsTransparent = YES;
     window.styleMask |= NSWindowStyleMaskFullSizeContentView;
-    [window setMinSize:CGSizeMake(300, 300)];
+    [window setMinSize:[MRUtil windowMinSize]];
     
     NSWindowController *rootWinController = [[NSWindowController alloc] initWithWindow:window];
     
