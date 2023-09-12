@@ -33,7 +33,7 @@
 }
 
 - (int)doFillAudioBuffers:(uint8_t * [2])buffer
-                 byteSize:(int)bufferSize
+                 byteSize:(int)needFillBufferSize
 {
     FFFrameItem *item = [self peek];
     if (!item) {
@@ -48,7 +48,7 @@
         return 0;
     }
     
-    int cpSize = MIN(bufferSize,leave);
+    int cpSize = MIN(needFillBufferSize,leave);
     
     for (int i = 0; i < 2; i++) {
         uint8_t *dst = buffer[i];
@@ -88,16 +88,17 @@
 - (int)fillBuffers:(uint8_t * _Nonnull [_Nullable 2])buffer
           byteSize:(int)bufferSize
 {
+    int needFillByteSize = bufferSize;
     uint8_t * dst[2] = { 0 };
     dst[0] = buffer[0];
     dst[1] = buffer[1];
     
     int totalFilled = 0;
-    while (bufferSize > 0) {
-        int filled = [self doFillAudioBuffers:dst byteSize:bufferSize];
+    while (needFillByteSize > 0) {
+        int filled = [self doFillAudioBuffers:dst byteSize:needFillByteSize];
         if (filled) {
             totalFilled += filled;
-            bufferSize -= filled;
+            needFillByteSize -= filled;
             if (dst[0]) {
                 dst[0] += filled;
             }

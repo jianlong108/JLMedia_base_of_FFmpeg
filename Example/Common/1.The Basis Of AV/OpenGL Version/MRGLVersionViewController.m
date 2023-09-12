@@ -7,7 +7,6 @@
 //
 
 #import "MRGLVersionViewController.h"
-//#import "fft"
 #import <FFmpegTutorial/FFTVersionHelper.h>
 #if TARGET_OS_OSX
 #import <FFmpegTutorial/FFTOpenGLVersionHelper.h>

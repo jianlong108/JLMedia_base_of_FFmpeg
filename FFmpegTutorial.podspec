@@ -54,15 +54,7 @@ Pod::Spec.new do |s|
     ss.source_files = 'FFmpegTutorial/Classes/0x03/*.{h,m}'
     ss.public_header_files = 'FFmpegTutorial/Classes/0x03/*.h'
   end
-  s.subspec '0x04' do |ss|
-    ss.source_files = 'FFmpegTutorial/Classes/0x04/*.{h,m}'
-    ss.public_header_files = 'FFmpegTutorial/Classes/0x04/*.h'
-  end
-
-  s.subspec '0x05' do |ss|
-    ss.source_files = 'FFmpegTutorial/Classes/0x05/*.{h,m}'
-    ss.public_header_files = 'FFmpegTutorial/Classes/0x05/*.h'
-  end
+  
 
   s.subspec '0x06' do |ss|
     ss.source_files = 'FFmpegTutorial/Classes/0x06/*.{h,m}'

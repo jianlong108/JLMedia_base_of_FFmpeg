@@ -121,49 +121,49 @@
     FFTPlayer0x03 *player = [[FFTPlayer0x03 alloc] init];
     player.contentPath = url;
     player.supportedPixelFormats = _pixelFormat;
-    
-    __weakSelf__
-    player.onVideoOpened = ^(FFTPlayer0x03 *player, NSDictionary * _Nonnull info) {
-        __strongSelf__
-        if (player != self.player) {
-            return;
-        }
-        //上一次 glview 完全销毁后，再创建
-        [self prepareGLViewIfNeed];
-        [self.indicatorView stopAnimation:nil];
-        NSLog(@"---VideoInfo-------------------");
-        NSLog(@"%@",info);
-        NSLog(@"----------------------");
-    };
-    
-    player.onError = ^(FFTPlayer0x03 *player, NSError * _Nonnull e) {
-        __strongSelf__
-        if (player != self.player) {
-            return;
-        }
-        [self.indicatorView stopAnimation:nil];
-        [self alert:[self.player.error localizedDescription]];
-        self.player = nil;
-        [self.timer invalidate];
-        self.timer = nil;
-    };
-    
-    player.onDecoderFrame = ^(FFTPlayer0x03 *player, int type, int serial, AVFrame * _Nonnull frame) {
-        __strongSelf__
-        if (player != self.player) {
-            return;
-        }
-        //video
-        if (type == 1) {
-            @autoreleasepool {
-                [self displayVideoFrame:frame];
-            }
-            mr_msleep(40);
-        }
-        //audio
-        else if (type == 2) {
-        }
-    };
+    player.delegate = self;
+//    __weakSelf__
+//    player.onVideoOpened = ^(FFTPlayer0x03 *player, NSDictionary * _Nonnull info) {
+//        __strongSelf__
+//        if (player != self.player) {
+//            return;
+//        }
+//        //上一次 glview 完全销毁后，再创建
+//        [self prepareGLViewIfNeed];
+//        [self.indicatorView stopAnimation:nil];
+//        NSLog(@"---VideoInfo-------------------");
+//        NSLog(@"%@",info);
+//        NSLog(@"----------------------");
+//    };
+//
+//    player.onError = ^(FFTPlayer0x03 *player, NSError * _Nonnull e) {
+//        __strongSelf__
+//        if (player != self.player) {
+//            return;
+//        }
+//        [self.indicatorView stopAnimation:nil];
+//        [self alert:[self.player.error localizedDescription]];
+//        self.player = nil;
+//        [self.timer invalidate];
+//        self.timer = nil;
+//    };
+//
+//    player.onDecoderFrame = ^(FFTPlayer0x03 *player, int type, int serial, AVFrame * _Nonnull frame) {
+//        __strongSelf__
+//        if (player != self.player) {
+//            return;
+//        }
+//        //video
+//        if (type == 1) {
+//            @autoreleasepool {
+//                [self displayVideoFrame:frame];
+//            }
+//            mr_msleep(40);
+//        }
+//        //audio
+//        else if (type == 2) {
+//        }
+//    };
     [player prepareToPlay];
     [player play];
     self.player = player;
@@ -171,7 +171,53 @@
     [self prepareTickTimerIfNeed];
     [self.indicatorView startAnimation:nil];
 }
+#pragma mark - FFTPlayer0x03Delegate
 
+- (void)player:(FFTPlayer0x03 *)player receiveMediaStream:(NSString *)info pixWidth:(CGFloat)w pixHeight:(CGFloat)h {
+    if (player != self.player) {
+        return;
+    }
+
+    [self prepareGLViewIfNeed];
+//    [self prepareRendererWidthClass:self.renderingClazz];
+    [self.indicatorView stopAnimation:nil];
+    NSLog(@"---VideoInfo-------------------");
+    NSLog(@"w:%f h:%f",w,h);
+    NSLog(@"----------------------");
+}
+// call frequently
+- (void)player:(FFTPlayer0x03 *)player whenReadPacket:(int)audioPacketCount videoPacketCount:(int)videoPacketCount {
+
+}
+// call frequently
+- (void)player:(FFTPlayer0x03 *)player whenDecodeFrameType:(int)frameType frameCount:(int)count frame:(AVFrame *)frame {
+    if (player != self.player) {
+        return;
+    }
+    //video
+    if (frameType == 1) {
+        @autoreleasepool {
+            [self displayVideoFrame:frame];
+        }
+        mr_msleep(40);
+    }
+    //frameType
+    else if (frameType == 2) {
+    }
+}
+
+
+- (void)player:(FFTPlayer0x03 *)player occureError:(NSError *)error
+{
+    if (player != self.player) {
+        return;
+    }
+    [self.indicatorView stopAnimation:nil];
+    [self alert:[self.player.error localizedDescription]];
+    self.player = nil;
+    [self.timer invalidate];
+    self.timer = nil;
+}
 - (void)prepareGLViewWidthClass:(Class)clazz
 {
     if (self.videoRenderer && [self.videoRenderer isKindOfClass:clazz]) {

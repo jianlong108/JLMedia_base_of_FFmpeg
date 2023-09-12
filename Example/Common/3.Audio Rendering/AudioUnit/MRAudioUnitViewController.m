@@ -18,14 +18,20 @@
 
 
 //将音频裸流PCM写入到文件
-#define DEBUG_RECORD_PCM_TO_FILE 0
+#define DEBUG_RECORD_PCM_TO_FILE 1
 
+#if DEBUG_RECORD_PCM_TO_FILE
+#include <libavformat/avformat.h>
+#import <libavutil/frame.h>
+#import "FFTPlayerHeader.h"
+#endif
 
-@interface MRAudioUnitViewController ()
+@interface MRAudioUnitViewController ()<FFTPlayer0x20Delegate>
 {
 #if DEBUG_RECORD_PCM_TO_FILE
     FILE * file_pcm_l;
-    FILE * file_pcm_r;
+//    FILE * file_pcm_r;
+    FILE * file_pcm;
 #endif
 }
 
@@ -125,48 +131,7 @@
     player.supportedPixelFormat  = MR_PIX_FMT_NV21;
     player.supportedSampleRate   = _sampleRate;
     player.supportedSampleFormat = _audioFmt;
-    
-    __weakSelf__
-    player.onStreamOpened = ^(FFTPlayer0x20 *player, NSDictionary * _Nonnull info) {
-        __strongSelf__
-        if (player != self.player) {
-            return;
-        }
-        
-        [self.indicatorView stopAnimation:nil];
-        self.audioFrameQueue = [[FFTAudioFrameQueue alloc] init];
-        [self setupAudioRender:self.audioFmt sampleRate:self.sampleRate];
-        [self playAudio];
-        NSLog(@"---VideoInfo-------------------");
-        NSLog(@"%@",info);
-        NSLog(@"----------------------");
-    };
-    
-    player.onError = ^(FFTPlayer0x20 *player, NSError * _Nonnull e) {
-        __strongSelf__
-        if (player != self.player) {
-            return;
-        }
-        [self.indicatorView stopAnimation:nil];
-        [self alert:[self.player.error localizedDescription]];
-        self.player = nil;
-        [self.timer invalidate];
-        self.timer = nil;
-    };
-    
-    player.onDecoderFrame = ^(FFTPlayer0x20 *player, int type, int serial, AVFrame * _Nonnull frame) {
-        __strongSelf__
-        if (player != self.player) {
-            return;
-        }
-        //video
-        if (type == 1) {
-        }
-        //audio
-        else if (type == 2) {
-            [self displayAudioFrame:frame];
-        }
-    };
+    player.delegate = self;
     [player prepareToPlay];
     [player play];
     self.player = player;
@@ -236,10 +201,10 @@
         fclose(file_pcm_l);
         file_pcm_l = NULL;
     }
-    if (file_pcm_r) {
-        fflush(file_pcm_r);
-        fclose(file_pcm_r);
-        file_pcm_r = NULL;
+    if (file_pcm) {
+        fflush(file_pcm);
+        fclose(file_pcm);
+        file_pcm = NULL;
     }
     
 #endif
@@ -348,6 +313,7 @@ static inline OSStatus MRRenderCallback(void *inRefCon,
                                         UInt32                        inNumberFrames,
                                         AudioBufferList                * ioData)
 {
+    NSLog(@"MRRenderCallback ioData->mNumberBuffers:%d inOutputBusNumber:%d inNumberFrames:%d mSampleTime:%f",ioData->mNumberBuffers,inOutputBusNumber,inNumberFrames,inTimeStamp->mSampleTime);
     uint8_t * buffer[2] = { 0 };
     UInt32 bufferSize = 0;
     // 1. 将buffer数组全部置为0；
@@ -356,49 +322,104 @@ static inline OSStatus MRRenderCallback(void *inRefCon,
         bzero(audioBuffer.mData, audioBuffer.mDataByteSize);
         buffer[i] = (uint8_t *)audioBuffer.mData;
         bufferSize = audioBuffer.mDataByteSize;
+        NSLog(@"MRRenderCallback channel:%d need bufferSize:%d ",i,audioBuffer.mDataByteSize);
     }
     
     MRAudioUnitViewController *am = (__bridge MRAudioUnitViewController *)inRefCon;
-    [am fillBuffers:buffer byteSize:bufferSize];
+    [am fillBuffers:buffer byteSize:bufferSize planner:ioData->mNumberBuffers == 2];
     return noErr;
 }
 
 - (void)fillBuffers:(uint8_t *[2])buffer
-           byteSize:(UInt32)bufferSize
+           byteSize:(UInt32)bufferSize planner:(BOOL)isPlanner
 {
     [self.audioFrameQueue fillBuffers:buffer byteSize:bufferSize];
 #if DEBUG_RECORD_PCM_TO_FILE
-    for(int i = 0; i < 2; i++) {
-        uint8_t *src = buffer[i];
-        if (NULL != src) {
-            if (i == 0) {
-                if (file_pcm_l == NULL) {
-                    NSString *fileName = [NSString stringWithFormat:@"L-%@.pcm",self.audioSampleInfo];
-                    const char *l = [[NSTemporaryDirectory() stringByAppendingPathComponent:fileName]UTF8String];
-                    NSLog(@"create file:%s",l);
-                    file_pcm_l = fopen(l, "wb+");
-                }
-                fwrite(src, bufferSize, 1, file_pcm_l);
-            } else if (i == 1) {
-                if (file_pcm_r == NULL) {
-                    
-                    NSString *fileName = [NSString stringWithFormat:@"R-%@.pcm",self.audioSampleInfo];
-                    const char *r = [[NSTemporaryDirectory() stringByAppendingPathComponent:fileName]UTF8String];
-                    NSLog(@"create file:%s",r);
-                    file_pcm_r = fopen(r, "wb+");
-                }
-                fwrite(src, bufferSize, 1, file_pcm_r);
+    if (isPlanner) {
+        // ffplay -ar 44100 -ac 2 -f f32le -i xxx.pcm
+        // f32le <= AV_SAMPLE_FMT_FLT
+        if (file_pcm == NULL) {
+            NSString *fileName = [NSString stringWithFormat:@"%@_planner.pcm",self.audioSampleInfo];
+            const char *l = [[NSTemporaryDirectory() stringByAppendingPathComponent:fileName] UTF8String];
+            NSLog(@"create file:%s",l);
+            file_pcm = fopen(l, "wb+");
+        }
+        int perSampleSize = audio_bytes_per_sample(_audioFmt);
+        int samples = bufferSize / perSampleSize;
+        for (int i = 0; i < samples; i++) {
+            for (int channel = 0; channel < 2; channel++) {
+                uint8_t *src = buffer[channel];
+                fwrite(src + i*perSampleSize, perSampleSize, 1, file_pcm);
             }
         }
+    } else {
+        // 只有一个平面,直接取buffer[0]即可
+//        for(int i = 0; i < 2; i++) {
+            uint8_t *src = buffer[0];
+            if (NULL != src) {
+//                if (i == 0) {
+                    if (file_pcm_l == NULL) {
+                        NSString *fileName = [NSString stringWithFormat:@"%@.pcm",self.audioSampleInfo];
+                        const char *l = [[NSTemporaryDirectory() stringByAppendingPathComponent:fileName] UTF8String];
+                        NSLog(@"create file:%s",l);
+                        file_pcm_l = fopen(l, "wb+");
+                    }
+                    fwrite(src, bufferSize, 1, file_pcm_l);
+//                } else if (i == 1) {
+//                    if (file_pcm_r == NULL) {
+//
+//                        NSString *fileName = [NSString stringWithFormat:@"R-%@.pcm",self.audioSampleInfo];
+//                        const char *r = [[NSTemporaryDirectory() stringByAppendingPathComponent:fileName] UTF8String];
+//                        NSLog(@"create file:%s",r);
+//                        file_pcm_r = fopen(r, "wb+");
+//                    }
+//                    fwrite(src, bufferSize, 1, file_pcm_r);
+//                }
+//            }
+        }
     }
+
 #endif
 }
 
 - (void)displayAudioFrame:(AVFrame *)frame
 {
     const char *fmt_str = av_sample_fmt_to_string(frame->format);
-    self.audioSampleInfo = [NSString stringWithFormat:@"(%s)%d",fmt_str,frame->sample_rate];
+    self.audioSampleInfo = [NSString stringWithFormat:@"%s_%d",fmt_str,frame->sample_rate];
     [self.audioFrameQueue enQueue:frame];
+}
+
+#pragma mark - playerDelegate
+
+- (void)player:(FFTPlayer0x20 *)player occureError:(NSError *)error {
+
+    [self.indicatorView stopAnimation:nil];
+    [self alert:[self.player.error localizedDescription]];
+    self.player = nil;
+    [self.timer invalidate];
+    self.timer = nil;
+}
+
+- (void)player:(FFTPlayer0x20 *)player receiveMediaStream:(nonnull NSString *)info pixWidth:(CGFloat)w pixHeight:(CGFloat)h {
+
+    [self.indicatorView stopAnimation:nil];
+    self.audioFrameQueue = [[FFTAudioFrameQueue alloc] init];
+    [self setupAudioRender:self.audioFmt sampleRate:self.sampleRate];
+    [self playAudio];
+    NSLog(@"---VideoInfo-------------------");
+    NSLog(@"%@",info);
+    NSLog(@"----------------------");
+}
+
+- (void)player:(FFTPlayer0x20 *)player whenDecodeFrameType:(int)frameType frameCount:(int)count frame:(AVFrame *)frame {
+
+    //video
+    if (frameType == 1) {
+    }
+    //audio
+    else if (frameType == 2) {
+        [self displayAudioFrame:frame];
+    }
 }
 
 #pragma - mark actions

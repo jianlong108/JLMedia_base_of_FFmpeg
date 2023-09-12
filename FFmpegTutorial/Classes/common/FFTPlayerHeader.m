@@ -202,11 +202,18 @@ enum AVPixelFormat MRPixelFormat2AV (MRPixelFormat mrpf){
     }
 }
 
+int audio_bytes_per_sample(MRSampleFormat sampleFmt) {
+    return av_get_bytes_per_sample(MRSampleFormat2AV(sampleFmt));
+}
 int audio_buffer_size(AVFrame *frame)
 {
+    int size1 = av_get_bytes_per_sample(frame->format) * frame->nb_samples;
     const int fmt = frame->format;
     int chanels = av_sample_fmt_is_planar(fmt) ? 1 : 2;
     //self.frame->linesize[i] 比 data_size 要大，所以有杂音
     int data_size = av_samples_get_buffer_size(frame->linesize, chanels, frame->nb_samples, fmt, 1);
+    if (size1 != data_size) {
+        NSLog(@"audio_buffer_size %d %d samples:%d",size1,data_size,frame->nb_samples);
+    }
     return data_size;
 }

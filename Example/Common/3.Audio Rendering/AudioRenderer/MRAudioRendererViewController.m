@@ -15,7 +15,7 @@
 
 #import "MRAudioRenderer.h"
 
-@interface MRAudioRendererViewController ()
+@interface MRAudioRendererViewController ()<FFTPlayer0x20Delegate>
 
 @property (strong) FFTPlayer0x20 *player;
 @property (weak) IBOutlet NSTextField *inputField;
@@ -109,48 +109,7 @@
     player.supportedPixelFormat  = MR_PIX_FMT_NV21;
     player.supportedSampleRate   = _sampleRate;
     player.supportedSampleFormat = _audioFmt;
-    
-    __weakSelf__
-    player.onStreamOpened = ^(FFTPlayer0x20 *player, NSDictionary * _Nonnull info) {
-        __strongSelf__
-        if (player != self.player) {
-            return;
-        }
-        
-        [self.indicatorView stopAnimation:nil];
-        self.audioFrameQueue = [[FFTAudioFrameQueue alloc] init];
-        [self setupAudioRender:self.audioFmt sampleRate:self.sampleRate];
-        [self playAudio];
-        NSLog(@"---VideoInfo-------------------");
-        NSLog(@"%@",info);
-        NSLog(@"----------------------");
-    };
-    
-    player.onError = ^(FFTPlayer0x20 *player, NSError * _Nonnull e) {
-        __strongSelf__
-        if (player != self.player) {
-            return;
-        }
-        [self.indicatorView stopAnimation:nil];
-        [self alert:[self.player.error localizedDescription]];
-        self.player = nil;
-        [self.timer invalidate];
-        self.timer = nil;
-    };
-    
-    player.onDecoderFrame = ^(FFTPlayer0x20 *player, int type, int serial, AVFrame * _Nonnull frame) {
-        __strongSelf__
-        if (player != self.player) {
-            return;
-        }
-        //video
-        if (type == 1) {
-        }
-        //audio
-        else if (type == 2) {
-            [self displayAudioFrame:frame];
-        }
-    };
+    player.delegate = self;
     [player prepareToPlay];
     [player play];
     self.player = player;
@@ -224,7 +183,38 @@
     self.audioSampleInfo = [NSString stringWithFormat:@"(%s)%d",fmt_str,frame->sample_rate];
     [self.audioFrameQueue enQueue:frame];
 }
+#pragma mark - playerDelegate
 
+- (void)player:(FFTPlayer0x20 *)player occureError:(NSError *)error {
+
+    [self.indicatorView stopAnimation:nil];
+    [self alert:[self.player.error localizedDescription]];
+    self.player = nil;
+    [self.timer invalidate];
+    self.timer = nil;
+}
+
+- (void)player:(FFTPlayer0x20 *)player receiveMediaStream:(nonnull NSString *)info pixWidth:(CGFloat)w pixHeight:(CGFloat)h {
+
+    [self.indicatorView stopAnimation:nil];
+    self.audioFrameQueue = [[FFTAudioFrameQueue alloc] init];
+    [self setupAudioRender:self.audioFmt sampleRate:self.sampleRate];
+    [self playAudio];
+    NSLog(@"---VideoInfo-------------------");
+    NSLog(@"%@",info);
+    NSLog(@"----------------------");
+}
+
+- (void)player:(FFTPlayer0x20 *)player whenDecodeFrameType:(int)frameType frameCount:(int)count frame:(AVFrame *)frame {
+
+    //video
+    if (frameType == 1) {
+    }
+    //audio
+    else if (frameType == 2) {
+        [self displayAudioFrame:frame];
+    }
+}
 #pragma - mark actions
 
 - (IBAction)go:(NSButton *)sender

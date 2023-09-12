@@ -32,7 +32,7 @@ kFFTPlayer0x36InfoKey kFFTPlayer0x36Height = @"kFFTPlayer0x36Height";
 kFFTPlayer0x36InfoKey kFFTPlayer0x36Duration = @"kFFTPlayer0x36Duration";
 
 //将音频裸流PCM写入到文件
-#define DEBUG_RECORD_PCM_TO_FILE 0
+#define DEBUG_RECORD_PCM_TO_FILE 1
 
 @interface  FFTPlayer0x36 ()<FFTDecoderDelegate>
 {
@@ -825,7 +825,8 @@ static int decode_interrupt_cb(void *ctx)
         }
     }
 #if DEBUG_RECORD_PCM_TO_FILE
-    for(int i = 0; i < 2; i++) {
+    NSLog(@"%s %@ planner格式",av_sample_fmt_to_string(_audioDecoder.format),av_sample_fmt_is_planar(_audioDecoder.format) == 1 ? @"是":@"不是");
+    for(int i = 0; i < _audioDecoder.channelLayout; i++) {
         uint8_t *src = buffer[i];
         if (NULL != src) {
             if (i == 0) {

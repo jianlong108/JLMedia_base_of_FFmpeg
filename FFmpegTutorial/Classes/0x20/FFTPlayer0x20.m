@@ -9,7 +9,7 @@
 #import "FFTThread.h"
 #import <libavutil/pixdesc.h>
 #import <libavformat/avformat.h>
-#import "FFTDecoder0x20.h"
+#import "FFTDecoder0x03.h"
 #import "FFTVideoScale.h"
 #import "FFTAudioResample.h"
 #import "FFTDispatch.h"
@@ -20,12 +20,12 @@ kFFTPlayer0x20InfoKey kFFTPlayer0x20Width = @"kFFTPlayer0x20Width";
 //视频高；单位像素
 kFFTPlayer0x20InfoKey kFFTPlayer0x20Height = @"kFFTPlayer0x20Height";
 
-@interface  FFTPlayer0x20 ()<FFTDecoderDelegate0x20>
+@interface  FFTPlayer0x20 ()<FFTDecoder0x03Delegate>
 {
     //音频流解码器
-    FFTDecoder0x20 *_audioDecoder;
+    FFTDecoder0x03 *_audioDecoder;
     //视频流解码器
-    FFTDecoder0x20 *_videoDecoder;
+    FFTDecoder0x03 *_videoDecoder;
     
     //图像格式转换/缩放器
     FFTVideoScale *_videoScale;
@@ -90,9 +90,9 @@ static int decode_interrupt_cb(void *ctx)
 
 #pragma mark - 打开解码器创建解码线程
 
-- (FFTDecoder0x20 *)openStreamComponent:(AVFormatContext *)ic streamIdx:(int)idx
+- (FFTDecoder0x03 *)openStreamComponent:(AVFormatContext *)ic streamIdx:(int)idx
 {
-    FFTDecoder0x20 *decoder = [FFTDecoder0x20 new];
+    FFTDecoder0x03 *decoder = [FFTDecoder0x03 new];
     decoder.ic = ic;
     decoder.streamIdx = idx;
     if ([decoder open] == 0) {
@@ -175,10 +175,7 @@ static int decode_interrupt_cb(void *ctx)
             [self decodePkt:formatCtx pkt:pkt];
             //释放内存
             av_packet_unref(pkt);
-            
-            if (self.onReadPkt) {
-                self.onReadPkt(self,self.audioPktCount,self.videoPktCount);
-            }
+            [self.delegate player:self whenReadPacket:self.audioPktCount videoPacketCount:self.videoPktCount];
         }
     }
     
@@ -300,7 +297,7 @@ static int decode_interrupt_cb(void *ctx)
         }
     }
     
-    NSMutableDictionary *dumpDic = [NSMutableDictionary dictionary];
+//    NSMutableDictionary *dumpDic = [NSMutableDictionary dictionary];
     
 //    if (st_index[AVMEDIA_TYPE_VIDEO] >= 0){
 //        _videoDecoder = [self openStreamComponent:formatCtx streamIdx:st_index[AVMEDIA_TYPE_VIDEO]];
@@ -318,11 +315,11 @@ static int decode_interrupt_cb(void *ctx)
 //        }
 //    }
     
-    mr_sync_main_queue(^{
-        if (self.onStreamOpened) {
-            self.onStreamOpened(self,dumpDic);
-        }
-    });
+//    mr_sync_main_queue(^{
+//        if (self.onStreamOpened) {
+//            self.onStreamOpened(self,dumpDic);
+//        }
+//    });
     
     //循环读包
     [self readPacketLoop:formatCtx];
@@ -445,7 +442,7 @@ static int decode_interrupt_cb(void *ctx)
 
 #pragma mark - FFTDecoderDelegate0x20
 
-- (void)decoder:(FFTDecoder0x20 *)decoder reveivedAFrame:(AVFrame *)aFrame
+- (void)decoder:(FFTDecoder0x03 *)decoder reveivedAFrame:(AVFrame *)aFrame
 {
     if (decoder == _audioDecoder) {
         AVFrame *audioFrame = nil;
@@ -460,9 +457,7 @@ static int decode_interrupt_cb(void *ctx)
         }
         
         self.audioFrameCount++;
-        if (self.onDecoderFrame) {
-            self.onDecoderFrame(self,2, self.audioFrameCount, audioFrame);
-        }
+        [self.delegate player:self whenDecodeFrameType:2 frameCount:self.audioFrameCount frame:audioFrame];
     } else if (decoder == _videoDecoder) {
         AVFrame *videoFrame = nil;
         if (_videoScale) {
@@ -476,18 +471,14 @@ static int decode_interrupt_cb(void *ctx)
         }
         
         self.videoFrameCount++;
-        if (self.onDecoderFrame) {
-            self.onDecoderFrame(self,1, self.videoFrameCount, videoFrame);
-        }
+        [self.delegate player:self whenDecodeFrameType:1 frameCount:self.videoFrameCount frame:videoFrame];
     }
 }
 
 - (void)performErrorResultOnMainThread
 {
     mr_sync_main_queue(^{
-        if (self.onError) {
-            self.onError(self,self.error);
-        }
+        [self.delegate player:self occureError:self.error];
     });
 }
 

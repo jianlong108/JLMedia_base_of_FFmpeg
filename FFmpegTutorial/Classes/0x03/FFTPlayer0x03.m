@@ -170,10 +170,7 @@ static int decode_interrupt_cb(void *ctx)
             [self decodePkt:formatCtx pkt:pkt];
             //释放内存
             av_packet_unref(pkt);
-            
-            if (self.onReadPkt) {
-                self.onReadPkt(self,self.audioPktCount,self.videoPktCount);
-            }
+            [self.delegate player:self whenReadPacket:self.audioPktCount videoPacketCount:self.videoPktCount];
         }
     }
     
@@ -312,9 +309,7 @@ static int decode_interrupt_cb(void *ctx)
     }
     
     mr_sync_main_queue(^{
-        if (self.onVideoOpened) {
-            self.onVideoOpened(self,dumpDic);
-        }
+        [self.delegate player:self receiveMediaStream:[NSString stringWithUTF8String:av_pixel_fmt_to_string(_videoDecoder.pix_fmt)] pixWidth:_videoDecoder.picWidth pixHeight:_videoDecoder.picHeight];
     });
     
     //循环读包
@@ -381,9 +376,7 @@ static int decode_interrupt_cb(void *ctx)
 {
     if (decoder == _audioDecoder) {
         self.audioFrameCount++;
-        if (self.onDecoderFrame) {
-            self.onDecoderFrame(self,2,self.audioFrameCount,frame);
-        }
+        [self.delegate player:self whenDecodeFrameType:2 frameCount:self.audioFrameCount frame:frame];
     } else if (decoder == _videoDecoder) {
         AVFrame *outP = nil;
         if (_videoScale) {
@@ -397,18 +390,14 @@ static int decode_interrupt_cb(void *ctx)
         }
         
         self.videoFrameCount++;
-        if (self.onDecoderFrame) {
-            self.onDecoderFrame(self,1,self.videoFrameCount,outP);
-        }
+        [self.delegate player:self whenDecodeFrameType:1 frameCount:self.videoFrameCount frame:outP];
     }
 }
 
 - (void)performErrorResultOnMainThread
 {
     mr_sync_main_queue(^{
-        if (self.onError) {
-            self.onError(self,self.error);
-        }
+        [self.delegate player:self occureError:self.error];
     });
 }
 

@@ -21,7 +21,7 @@
 #define DEBUG_RECORD_PCM_TO_FILE 0
 
 
-@interface MRAudioQueueViewController ()
+@interface MRAudioQueueViewController () <FFTPlayer0x20Delegate>
 {
 #if DEBUG_RECORD_PCM_TO_FILE
     FILE * file_pcm_l;
@@ -126,51 +126,7 @@
     player.supportedPixelFormat  = MR_PIX_FMT_NV21;
     player.supportedSampleRate   = _sampleRate;
     player.supportedSampleFormat = _audioFmt;
-    
-    __weakSelf__
-    player.onStreamOpened = ^(FFTPlayer0x20 *player, NSDictionary * _Nonnull info) {
-        __strongSelf__
-        if (player != self.player) {
-            return;
-        }
-        
-        [self.indicatorView stopAnimation:nil];
-        self.audioFrameQueue = [[FFTAudioFrameQueue alloc] init];
-        [self setupAudioRender:self.audioFmt sampleRate:self.sampleRate];
-        [self prepareTickTimerIfNeed];
-        [self.indicatorView stopAnimation:nil];
-        [self playAudio];
-        
-        NSLog(@"---VideoInfo-------------------");
-        NSLog(@"%@",info);
-        NSLog(@"----------------------");
-    };
-    
-    player.onError = ^(FFTPlayer0x20 *player, NSError * _Nonnull e) {
-        __strongSelf__
-        if (player != self.player) {
-            return;
-        }
-        [self.indicatorView stopAnimation:nil];
-        [self alert:[self.player.error localizedDescription]];
-        self.player = nil;
-        [self.timer invalidate];
-        self.timer = nil;
-    };
-    
-    player.onDecoderFrame = ^(FFTPlayer0x20 *player, int type, int serial, AVFrame * _Nonnull frame) {
-        __strongSelf__
-        if (player != self.player) {
-            return;
-        }
-        //video
-        if (type == 1) {
-        }
-        //audio
-        else if (type == 2) {
-            [self displayAudioFrame:frame];
-        }
-    };
+    player.delegate = self;
     [player prepareToPlay];
     [player play];
     self.player = player;
@@ -386,6 +342,38 @@ static void MRAudioQueueOutputCallback(
     const char *fmt_str = av_sample_fmt_to_string(frame->format);
     self.audioSampleInfo = [NSString stringWithFormat:@"(%s)%d",fmt_str,frame->sample_rate];
     [self.audioFrameQueue enQueue:frame];
+}
+#pragma mark - playerDelegate
+
+- (void)player:(FFTPlayer0x20 *)player occureError:(NSError *)error {
+
+    [self.indicatorView stopAnimation:nil];
+    [self alert:[self.player.error localizedDescription]];
+    self.player = nil;
+    [self.timer invalidate];
+    self.timer = nil;
+}
+
+- (void)player:(FFTPlayer0x20 *)player receiveMediaStream:(nonnull NSString *)info pixWidth:(CGFloat)w pixHeight:(CGFloat)h {
+
+    [self.indicatorView stopAnimation:nil];
+    self.audioFrameQueue = [[FFTAudioFrameQueue alloc] init];
+    [self setupAudioRender:self.audioFmt sampleRate:self.sampleRate];
+    [self playAudio];
+    NSLog(@"---VideoInfo-------------------");
+    NSLog(@"%@",info);
+    NSLog(@"----------------------");
+}
+
+- (void)player:(FFTPlayer0x20 *)player whenDecodeFrameType:(int)frameType frameCount:(int)count frame:(AVFrame *)frame {
+
+    //video
+    if (frameType == 1) {
+    }
+    //audio
+    else if (frameType == 2) {
+        [self displayAudioFrame:frame];
+    }
 }
 
 #pragma - mark actions

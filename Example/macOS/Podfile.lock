@@ -4,8 +4,6 @@ PODS:
     - FFmpegTutorial/0x01 (= 0.5.20)
     - FFmpegTutorial/0x02 (= 0.5.20)
     - FFmpegTutorial/0x03 (= 0.5.20)
-    - FFmpegTutorial/0x04 (= 0.5.20)
-    - FFmpegTutorial/0x05 (= 0.5.20)
     - FFmpegTutorial/0x06 (= 0.5.20)
     - FFmpegTutorial/0x10 (= 0.5.20)
     - FFmpegTutorial/0x20 (= 0.5.20)
@@ -22,8 +20,6 @@ PODS:
   - FFmpegTutorial/0x01 (0.5.20)
   - FFmpegTutorial/0x02 (0.5.20)
   - FFmpegTutorial/0x03 (0.5.20)
-  - FFmpegTutorial/0x04 (0.5.20)
-  - FFmpegTutorial/0x05 (0.5.20)
   - FFmpegTutorial/0x06 (0.5.20)
   - FFmpegTutorial/0x10 (0.5.20)
   - FFmpegTutorial/0x20 (0.5.20)
@@ -51,7 +47,7 @@ EXTERNAL SOURCES:
     :path: "../../"
 
 SPEC CHECKSUMS:
-  FFmpegTutorial: 388eacc93b642be54f9edd4fc83c1e3911579512
+  FFmpegTutorial: b6ff490d1bfcbe1116b7c6bdd192d15af77c5b0d
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
 
 PODFILE CHECKSUM: b9120afcf20e353e7d990209cbc490ef02928aa7

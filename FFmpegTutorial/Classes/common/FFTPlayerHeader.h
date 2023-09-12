@@ -111,13 +111,14 @@ typedef enum MRPixelFormatMask{
     MR_PIX_FMT_MASK_BGR24   = 1 << MR_PIX_FMT_BGR24,      // packed RGB 8:8:8, 24bpp, BGRBGR...
 }MRPixelFormatMask;
 
+// 参考AVSampleFormat的值进行初始化
 typedef enum MRSampleFormat{
-    MR_SAMPLE_FMT_NONE ,
-    MR_SAMPLE_FMT_S16  ,    // signed 16 bits
-    MR_SAMPLE_FMT_FLT  ,    // float
-    MR_SAMPLE_FMT_S16P ,    // signed 16 bits, planar
-    MR_SAMPLE_FMT_FLTP ,    // float, planar
-    MR_SAMPLE_FMT_EOF
+    MR_SAMPLE_FMT_NONE = -1,
+    MR_SAMPLE_FMT_S16 = 1,    // signed 16 bits
+    MR_SAMPLE_FMT_FLT = 3,    // float
+    MR_SAMPLE_FMT_S16P = 6,    // signed 16 bits, planar
+    MR_SAMPLE_FMT_FLTP = 8,    // float, planar
+    MR_SAMPLE_FMT_EOF = 999
 }MRSampleFormat;
 
 static int MR_SAMPLE_FMT_BEGIN = MR_SAMPLE_FMT_NONE + 1;
@@ -244,5 +245,5 @@ const char * av_sample_fmt_to_string(int format);
 
 typedef struct AVFrame AVFrame;
 int audio_buffer_size(AVFrame *frame);
-
+int audio_bytes_per_sample(MRSampleFormat sampleFmt) ;
 #endif /* FFTPlayerHeader_h */

@@ -63,7 +63,6 @@
 		DD900FD62933168B00CECDE4 /* MRCoreMediaView.m in Sources */ = {isa = PBXBuildFile; fileRef = DD900FCE2933168B00CECDE4 /* MRCoreMediaView.m */; };
 		DD900FD72933168B00CECDE4 /* MRCoreGraphicsView.m in Sources */ = {isa = PBXBuildFile; fileRef = DD900FCF2933168B00CECDE4 /* MRCoreGraphicsView.m */; };
 		DD900FD82933168B00CECDE4 /* MRGAMViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DD900FD12933168B00CECDE4 /* MRGAMViewController.m */; };
-		DD900FD92933168B00CECDE4 /* MRGAMViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD900FD32933168B00CECDE4 /* MRGAMViewController.xib */; };
 		DD900FDA2933168B00CECDE4 /* MRCoreAnimationView.m in Sources */ = {isa = PBXBuildFile; fileRef = DD900FD52933168B00CECDE4 /* MRCoreAnimationView.m */; };
 		DD900FEE293352EE00CECDE4 /* MRLegacyGLBGRAView.m in Sources */ = {isa = PBXBuildFile; fileRef = DD900FE0293352EE00CECDE4 /* MRLegacyGLBGRAView.m */; };
 		DD900FF0293352EE00CECDE4 /* MRLegacyGLViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD900FE3293352EE00CECDE4 /* MRLegacyGLViewController.xib */; };
@@ -233,7 +232,6 @@
 		DD900FD02933168B00CECDE4 /* MRCoreAnimationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRCoreAnimationView.h; sourceTree = "<group>"; };
 		DD900FD12933168B00CECDE4 /* MRGAMViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRGAMViewController.m; sourceTree = "<group>"; };
 		DD900FD22933168B00CECDE4 /* MRCoreGraphicsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRCoreGraphicsView.h; sourceTree = "<group>"; };
-		DD900FD32933168B00CECDE4 /* MRGAMViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MRGAMViewController.xib; sourceTree = "<group>"; };
 		DD900FD42933168B00CECDE4 /* MRCoreMediaView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRCoreMediaView.h; sourceTree = "<group>"; };
 		DD900FD52933168B00CECDE4 /* MRCoreAnimationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRCoreAnimationView.m; sourceTree = "<group>"; };
 		DD900FE0293352EE00CECDE4 /* MRLegacyGLBGRAView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRLegacyGLBGRAView.m; sourceTree = "<group>"; };
@@ -494,7 +492,6 @@
 				DD900FCE2933168B00CECDE4 /* MRCoreMediaView.m */,
 				DD900FCD2933168B00CECDE4 /* MRGAMViewController.h */,
 				DD900FD12933168B00CECDE4 /* MRGAMViewController.m */,
-				DD900FD32933168B00CECDE4 /* MRGAMViewController.xib */,
 			);
 			path = "Core-Graphics-Animation-Media";
 			sourceTree = "<group>";
@@ -886,7 +883,6 @@
 				DDF59928288ED5D30079D26E /* MR0x34ViewController.xib in Resources */,
 				DDF922AD28E947FA00F29C1A /* 2_sampler2D.fsh in Resources */,
 				DDCC56A6294EC3120024A4D7 /* MRHaveFunViewController.xib in Resources */,
-				DD900FD92933168B00CECDE4 /* MRGAMViewController.xib in Resources */,
 				DDF922D628E94A8700F29C1A /* 3_sampler2D.fsh in Resources */,
 				DD41902B2934661B00ADEFA7 /* MRModernGLViewController.xib in Resources */,
 				DD41902C2934661B00ADEFA7 /* 3_sampler2D_v3.fsh in Resources */,

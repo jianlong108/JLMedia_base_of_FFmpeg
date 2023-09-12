@@ -5,11 +5,11 @@
 //  Created by Matt Reach on 2022/7/10.
 //
 
-#import "FFTDecoder0x20.h"
+#import "FFTDecoder0x03.h"
 #import <libavcodec/avcodec.h>
 #import <libavformat/avformat.h>
 
-@interface FFTDecoder0x20()
+@interface FFTDecoder0x03()
 {
     //创建一个frame就行了，可以复用
     AVFrame *_frame;
@@ -27,7 +27,7 @@
 
 @end
 
-@implementation FFTDecoder0x20
+@implementation FFTDecoder0x03
 
 - (void)dealloc
 {

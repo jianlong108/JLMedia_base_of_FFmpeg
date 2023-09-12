@@ -16,21 +16,21 @@ typedef struct AVFormatContext AVFormatContext;
 typedef struct AVPacket AVPacket;
 typedef struct AVFrame AVFrame;
 
-@class FFTDecoder0x20;
-@protocol FFTDecoderDelegate0x20 <NSObject>
+@class FFTDecoder0x03;
+@protocol FFTDecoder0x03Delegate <NSObject>
 
 @required
 ///将解码后的 AVFrame 给 delegater
-- (void)decoder:(FFTDecoder0x20 *)decoder reveivedAFrame:(AVFrame *)frame;
+- (void)decoder:(FFTDecoder0x03 *)decoder reveivedAFrame:(AVFrame *)frame;
 
 @end
 
-@interface FFTDecoder0x20 : NSObject
+@interface FFTDecoder0x03 : NSObject
 
 @property (nonatomic, assign) AVFormatContext *ic;
 @property (nonatomic, assign) int streamIdx;
 @property (nonatomic, copy) NSString * name;
-@property (nonatomic, weak) id <FFTDecoderDelegate0x20> delegate;
+@property (nonatomic, weak) id <FFTDecoder0x03Delegate> delegate;
 @property (nonatomic, assign, readonly) AVStream * stream;
 //for video is enum AVPixelFormat,for audio is enum AVSampleFormat,
 @property (nonatomic, assign, readonly) int format;

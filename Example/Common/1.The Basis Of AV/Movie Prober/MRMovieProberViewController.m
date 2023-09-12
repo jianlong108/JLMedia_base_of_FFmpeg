@@ -134,7 +134,7 @@ FFTPlayer0x01Delegate
         make.size.mas_equalTo(CGSizeMake(200,20));
     }];
 #else
-    
+
 #endif
 }
 
